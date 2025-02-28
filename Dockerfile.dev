@@ -17,4 +17,4 @@ RUN mkdir /home/devrunner/src
 WORKDIR /home/devrunner/src
 VOLUME /home/devrunner/src
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["python", "./server.py", "-v"]
