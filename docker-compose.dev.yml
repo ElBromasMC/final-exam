@@ -1,0 +1,14 @@
+services:
+  devrunner:
+    image: devrunner
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+      args:
+        - USER_UID=${USER_UID}
+    volumes:
+      - type: bind
+        source: ./src
+        target: /home/devrunner/src
+    restart: unless-stopped
+    network_mode: host
