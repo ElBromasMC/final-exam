@@ -7,6 +7,7 @@ import ssl
 import uuid
 
 import cv2
+import face_recognition_filter
 from aiohttp import web
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder, MediaRelay
@@ -18,6 +19,7 @@ logger = logging.getLogger("pc")
 pcs = set()
 relay = MediaRelay()
 
+known_faces = face_recognition_filter.generateEncodings("img")
 
 class VideoTransformTrack(MediaStreamTrack):
     """
@@ -85,6 +87,15 @@ class VideoTransformTrack(MediaStreamTrack):
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
+        elif self.transform == "recognize":
+            img = frame.to_ndarray(format="bgr24")
+            img = face_recognition_filter.recognizeFaces(img, known_faces)
+            
+            new_frame = VideoFrame.from_ndarray(img, format="bgr24")
+            new_frame.pts = frame.pts
+            new_frame.time_base = frame.time_base
+            return new_frame
+
         else:
             return frame
 
