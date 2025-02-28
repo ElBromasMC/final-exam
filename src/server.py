@@ -5,6 +5,7 @@ import logging
 import os
 import ssl
 import uuid
+from asistence_manager import Classroom
 
 import cv2
 import face_recognition_filter
@@ -19,7 +20,10 @@ logger = logging.getLogger("pc")
 pcs = set()
 relay = MediaRelay()
 
-known_faces = face_recognition_filter.generateEncodings("img")
+classroom = Classroom()
+classroom.generateStudentData("img")
+known_faces = classroom.encodings_list
+student_data = classroom.students_list
 
 class VideoTransformTrack(MediaStreamTrack):
     """
@@ -89,7 +93,7 @@ class VideoTransformTrack(MediaStreamTrack):
             return new_frame
         elif self.transform == "recognize":
             img = frame.to_ndarray(format="bgr24")
-            img = face_recognition_filter.recognizeFaces(img, known_faces)
+            img = face_recognition_filter.recognizeFaces(img, known_faces, student_data, classroom.asistence_record)
             
             new_frame = VideoFrame.from_ndarray(img, format="bgr24")
             new_frame.pts = frame.pts
@@ -98,6 +102,7 @@ class VideoTransformTrack(MediaStreamTrack):
 
         else:
             return frame
+
 
 
 async def index(request):
@@ -136,6 +141,9 @@ async def offer(request):
         def on_message(message):
             if isinstance(message, str) and message.startswith("ping"):
                 channel.send("pong" + message[4:])
+            elif message == "register_asistence":
+                classroom.registerAsistence()
+            
 
     @pc.on("connectionstatechange")
     async def on_connectionstatechange():
@@ -143,6 +151,7 @@ async def offer(request):
         if pc.connectionState == "failed":
             await pc.close()
             pcs.discard(pc)
+        
 
     @pc.on("track")
     def on_track(track):

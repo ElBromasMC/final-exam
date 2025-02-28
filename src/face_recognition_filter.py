@@ -11,19 +11,17 @@ no_face_counter = 0  # Contador de frames sin detección
 max_no_face_frames = 8  # Cuántos frames esperar antes de borrar las detecciones
 skip_frames = 4  # Procesar solo 1 de cada N frames
 
-def generateEncodings(imgs_path):
-    known_faces = {}
-    known_faces['names'] = []
-    known_faces['encodings'] = []
-    for file in os.listdir(imgs_path):
-        image = face_recognition.load_image_file(os.path.join(imgs_path,file))
-        encoding = face_recognition.face_encodings(image)[0]
-        name = os.path.splitext(file)[0]
-        known_faces['names'].append(name)
-        known_faces['encodings'].append(encoding)
-    return known_faces
-
-
+# def generateEncodings(imgs_path):
+#     known_faces = {}
+#     known_faces['names'] = []
+#     known_faces['encodings'] = []
+#     for file in os.listdir(imgs_path):
+#         image = face_recognition.load_image_file(os.path.join(imgs_path,file))
+#         encoding = face_recognition.face_encodings(image)[0]
+#         name = os.path.splitext(file)[0]
+#         known_faces['names'].append(name)
+#         known_faces['encodings'].append(encoding)
+#     return known_faces
 
 def drawBoxes(frame, locations, names):
     for (top, right, bottom, left), name in zip(locations, names):
@@ -37,7 +35,7 @@ def drawBoxes(frame, locations, names):
         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
     return frame
 
-def recognizeFaces(frame, known_faces):
+def recognizeFaces(frame, known_encodings, students_data, asistence_record):
     global frame_counter, last_face_locations, last_face_names, no_face_counter
     frame_counter += 1
 
@@ -55,14 +53,15 @@ def recognizeFaces(frame, known_faces):
     face_names = []
 
     for face_encoding in face_encodings:
-        matches = face_recognition.compare_faces(known_faces['encodings'], face_encoding)
+        matches = face_recognition.compare_faces(known_encodings, face_encoding)
         name = "Unknown"
 
         if matches:
-            face_distances = face_recognition.face_distance(known_faces['encodings'], face_encoding)
+            face_distances = face_recognition.face_distance(known_encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
-                name = known_faces['names'][best_match_index]
+                name = students_data[best_match_index]['name']
+                asistence_record.append(best_match_index)
 
         face_names.append(name)
 
