@@ -144,6 +144,15 @@ function start() {
         }
     };
 
+    document.getElementById("register-asistence").addEventListener("click", function () {
+        if (dc.readyState === "open") {
+            dc.send("register_asistence");
+            console.log("📡 Enviando solicitud de asistencia a Python");
+        } else {
+            console.log("❌ DataChannel no está abierto");
+        }
+    });
+
     if (document.getElementById('use-datachannel').checked) {
         var parameters = JSON.parse(document.getElementById('datachannel-parameters').value);
 
@@ -168,6 +177,8 @@ function start() {
                 dataChannelLog.textContent += ' RTT ' + elapsed_ms + ' ms\n';
             }
         });
+
+        
     }
 
     // Build media constraints.
