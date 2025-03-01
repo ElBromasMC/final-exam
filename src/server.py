@@ -5,6 +5,7 @@ import logging
 import os
 import ssl
 import uuid
+from datetime import datetime
 from asistence_manager import Classroom
 
 import cv2
@@ -116,6 +117,10 @@ async def javascript(request):
 
 async def tailwind(request):
     content = open(os.path.join(ROOT, "static/css/tailwind.css"), "r").read()
+    return web.Response(content_type="text/css", text=content)
+
+async def asistencias(request):
+    content = open(os.path.join(ROOT, datetime.now().strftime("%Y_%m_%d") + "_asistence.csv"), "r").read()
     return web.Response(content_type="text/css", text=content)
 
 async def offer(request):
@@ -232,6 +237,7 @@ if __name__ == "__main__":
     app.router.add_get("/", index)
     app.router.add_get("/client.js", javascript)
     app.router.add_get("/tailwind.css", tailwind)
+    app.router.add_get("/asistencias", asistencias)
     app.router.add_post("/offer", offer)
     web.run_app(
         app, access_log=None, host=args.host, port=args.port, ssl_context=ssl_context
