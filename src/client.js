@@ -177,8 +177,6 @@ function start() {
                 dataChannelLog.textContent += ' RTT ' + elapsed_ms + ' ms\n';
             }
         });
-
-        
     }
 
     // Build media constraints.
@@ -235,7 +233,7 @@ function start() {
         negotiate();
     }
 
-    document.getElementById('stop').style.display = 'inline-block';
+    document.getElementById('stop').style.display = 'block';
 }
 
 function stop() {
@@ -264,6 +262,7 @@ function stop() {
     setTimeout(() => {
         pc.close();
     }, 500);
+    document.getElementById('start').style.display = 'block';
 }
 
 function sdpFilterCodec(kind, codec, realSdp) {
