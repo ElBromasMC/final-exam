@@ -35,16 +35,12 @@ class Classroom:
     def registerAsistence(self):
         file = open(self.asistence_file, 'w')
         self.clearAsistence()
-        for student_index in self.asistence_record:
-            file.write(self.students_list[student_index]['mat_id'] + ", " +
-                       self.students_list[student_index]['name'] + ", " + "PRESENT\n")
+        for student_index, student in enumerate(self.students_list):
+            if student_index in self.asistence_record:
+                file.write(f"{student['mat_id']}, {student['name']}, PRESENTE\n")
+            else:
+                file.write(f"{student['mat_id']}, {student['name']}, FALTA\n")
+        file.close()
                 
     def dump(self):
         print(self.students_list)
-
-# classroom = Classroom("students.csv")
-# classroom.generateList()
-# print(classroom.asistence_file)
-# classroom.dump()
-
-# classroom.registerAsistence([1,2])
