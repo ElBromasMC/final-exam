@@ -120,8 +120,19 @@ async def tailwind(request):
     return web.Response(content_type="text/css", text=content)
 
 async def asistencias(request):
-    content = open(os.path.join(ROOT, datetime.now().strftime("%Y_%m_%d") + "_asistence.csv"), "r").read()
-    return web.Response(content_type="text/css", text=content)
+    filename = datetime.now().strftime("%Y_%m_%d") + "_asistence.csv"
+    filepath = os.path.join(ROOT, filename)
+
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except FileNotFoundError:
+        return web.Response(text="File not found", status=404)
+
+    response = web.Response(body=content.encode("utf-8"), content_type="text/csv")
+    response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    return response
 
 async def offer(request):
     params = await request.json()
