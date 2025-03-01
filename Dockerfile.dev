@@ -12,9 +12,15 @@ RUN groupadd --gid $USER_GID devrunner \
 USER devrunner
 WORKDIR /home/devrunner
 
+COPY --chown=devrunner:devrunner ./scripts/docker-run.sh ./
+
+# Use npm to install dependencies
+COPY --chown=devrunner:devrunner package.json ./
+RUN npm install
+
 # Create and enter src folder
 RUN mkdir /home/devrunner/src
 WORKDIR /home/devrunner/src
 VOLUME /home/devrunner/src
 
-ENTRYPOINT ["python", "./server.py", "-v"]
+ENTRYPOINT ["/home/devrunner/docker-run.sh"]

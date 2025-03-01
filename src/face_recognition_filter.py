@@ -9,7 +9,7 @@ last_face_names = []
 frame_counter = 0  # Contador de frames
 no_face_counter = 0  # Contador de frames sin detección
 max_no_face_frames = 8  # Cuántos frames esperar antes de borrar las detecciones
-skip_frames = 4  # Procesar solo 1 de cada N frames
+skip_frames = 8  # Procesar solo 1 de cada N frames
 
 # def generateEncodings(imgs_path):
 #     known_faces = {}

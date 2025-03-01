@@ -8,7 +8,8 @@ services:
         - USER_UID=${USER_UID}
     volumes:
       - type: bind
-        source: ./src
+        source: ./
         target: /home/devrunner/src
     restart: unless-stopped
     network_mode: host
+
