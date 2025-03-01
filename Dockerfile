@@ -62,6 +62,8 @@ RUN makepkg -si --noconfirm --clean
 
 # Remove leftovers
 USER root
-RUN pacman -S --noconfirm python-ifaddr
+RUN pacman -S --noconfirm python-ifaddr \
+    nodejs \
+    npm
 RUN pacman -Qdtq | pacman -Rns --noconfirm -
 RUN userdel -r builder
