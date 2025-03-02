@@ -1,5 +1,10 @@
 # Examen final
 
+> **Importante**
+> El programa usa librerias que no son compatibles con Windows.
+> Para su ejecución puede usar [Docker Desktop](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module)
+> (recomendado) o en su defecto una máquina virtual con Linux.
+
 Este proyecto es un sistema de asistencia para aulas que utiliza reconocimiento facial usando `face_recognition` y WebRTC.
 
 ## Integrantes
@@ -21,7 +26,7 @@ Este proyecto es un sistema de asistencia para aulas que utiliza reconocimiento 
 2. Ingresa al directorio: `cd final-exam`
 3. Construye la imagen de Docker: `docker build -f Dockerfile -t elbromasmc/final-exam .`
 4. Ejecuta el contenedor: `docker compose -f docker-compose.dev.yml up --build`
-5. Abre tu navegador en [http://127.0.0.1:8080](http://127.0.0.1:8080)
+5. Abre tu navegador en <http://127.0.0.1:8080>
 
 ## Uso
 
